@@ -2,10 +2,12 @@
 
 namespace App\Http\Livewire;
 
+use App\Models\Major;
 use Rappasoft\LaravelLivewireTables\DataTableComponent;
 use Rappasoft\LaravelLivewireTables\Views\Column;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Builder;
+use Rappasoft\LaravelLivewireTables\Views\Filters\MultiSelectFilter;
 
 class StudentTable extends DataTableComponent
 {
@@ -43,5 +45,24 @@ class StudentTable extends DataTableComponent
             ->has('major')
             ->with('major')
             /* ->when($this->columnSearch['name'], fn($query, $name) => $query->where('name', 'like', "%$name%")) */;
+    }
+
+    public function filters(): array
+    {
+        return [
+            MultiSelectFilter::make('Program studi')
+                ->setFilterPillTitle('Prodi')
+                ->options(
+                    Major::select('id', 'name')->get()
+                    ->mapWithKeys(fn($item) => [ $item->id => $item->name ])
+                    ->all()
+                )
+                ->filter(fn(Builder $builder, array $value) => 
+                    $builder->when(
+                        $value,
+                        fn($query, $value) => $query->whereHas('major', fn(Builder $q) => $q->whereIn('majors.id', $value))
+                    )
+                )
+        ];
     }
 }
