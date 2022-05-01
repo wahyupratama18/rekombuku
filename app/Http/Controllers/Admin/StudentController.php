@@ -3,12 +3,9 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\User;
+use App\Models\{Major, User};
 use App\Http\Requests\{StoreStudentRequest, UpdateStudentRequest};
-use App\Models\Major;
-use App\Models\MajorStudent;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\{DB, Hash};
 use Illuminate\View\View;
 
 class StudentController extends Controller
@@ -51,11 +48,6 @@ class StudentController extends Controller
             ]);
 
             $student->majorStudent()->create(['major_id' => $request->major]);
-            
-            /* MajorStudent::create([
-                'user_id' => $student,
-                'major_id' => $request->major
-            ]); */
         });
         
         return redirect()->route('students.index');

@@ -27,4 +27,12 @@ window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 //     forceTLS: true
 // });
 
+/**
+ * Sweetalert
+ */
 window.Swal = require('sweetalert2')
+
+/**
+ * Tom Select
+*/
+window.TomSelect = require('tom-select')

@@ -21,8 +21,14 @@
                     <x-jet-nav-link href="{{ route('majors.index') }}" :active="request()->routeIs('majors.index')">
                         {{ __('Prodi') }}
                     </x-jet-nav-link>
+                    
                     <x-jet-nav-link href="{{ route('students.index') }}" :active="request()->routeIs('students.index')">
                         {{ __('Mahasiswa') }}
+                    </x-jet-nav-link>
+                    
+
+                    <x-jet-nav-link href="{{ route('books.index') }}" :active="request()->routeIs('books.index')">
+                        {{ __('Buku') }}
                     </x-jet-nav-link>
                     
                     @else
@@ -157,8 +163,13 @@
                 <x-jet-responsive-nav-link href="{{ route('majors.index') }}" :active="request()->routeIs('majors.index')">
                     {{ __('Prodi') }}
                 </x-jet-responsive-nav-link>
+                
                 <x-jet-responsive-nav-link href="{{ route('students.index') }}" :active="request()->routeIs('students.index')">
                     {{ __('Mahasiswa') }}
+                </x-jet-responsive-nav-link>
+
+                <x-jet-responsive-nav-link href="{{ route('books.index') }}" :active="request()->routeIs('books.index')">
+                    {{ __('Buku') }}
                 </x-jet-responsive-nav-link>
             @endcan
         </div>

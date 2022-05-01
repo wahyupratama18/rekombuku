@@ -44,7 +44,7 @@
                     <!-- Prodi -->
                     <div class="col-span-6 sm:col-span-4">
                         <x-jet-label for="major" value="{{ __('Program Studi') }}" />
-                        <select name="major" id="major" class="mt-1 block w-full">
+                        <select name="major" id="major" class="mt-1 block w-full" x-init="new TomSelect('#major')">
                             @foreach ($majors as $major)
                                 <option value="{{ $major->id }}" @selected(old('major') == $major->id)>{{ $major->name }}</option>
                             @endforeach

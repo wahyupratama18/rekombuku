@@ -11,9 +11,9 @@ class StoreBookRequest extends FormRequest
      *
      * @return bool
      */
-    public function authorize()
+    public function authorize(): bool
     {
-        return false;
+        return $this->user()->can('isAdmin');
     }
 
     /**
@@ -21,10 +21,18 @@ class StoreBookRequest extends FormRequest
      *
      * @return array
      */
-    public function rules()
+    public function rules(): array
     {
         return [
-            //
+            'name' => 'required|string',
+            'isbn' => 'required|string',
+            'year' => 'required|numeric|max:'.date('Y'),
+            'penerbit' => 'required|string',
+            'edition' => 'required|string',
+            'price' => 'required|numeric|min:0',
+            'genres' => 'nullable',
+            'genres.*' => 'required',
+            'qty' => 'required|integer|min:1'
         ];
     }
 }

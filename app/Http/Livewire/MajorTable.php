@@ -30,9 +30,9 @@ class MajorTable extends DataTableComponent
                 ->searchable(),
             Column::make("Jumlah Mahasiswa")
                 ->label(fn($row, Column $column) => $row->students_count)
-                /* ->sortable() */,
+                ->sortable(),
             Column::make('action')
-                ->label(fn($row) => view('admin.major.action', [
+                ->label(fn($row) => view('admin.majors.action', [
                     'route' => (object) [
                         'edit' => route('majors.edit', $row->id),
                         'destroy' => route('majors.destroy', $row->id),

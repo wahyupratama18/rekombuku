@@ -4,8 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Major;
-use App\Http\Requests\StoreMajorRequest;
-use App\Http\Requests\UpdateMajorRequest;
+use App\Http\Requests\{StoreMajorRequest, UpdateMajorRequest};
 use Illuminate\Contracts\View\View;
 
 class MajorController extends Controller
@@ -17,7 +16,7 @@ class MajorController extends Controller
      */
     public function index(): View
     {
-        return view('admin.major.index');
+        return view('admin.majors.index');
     }
 
     /**
@@ -27,7 +26,7 @@ class MajorController extends Controller
      */
     public function create(): View
     {
-        return view('admin.major.create');
+        return view('admin.majors.create');
     }
 
     /**
@@ -64,7 +63,7 @@ class MajorController extends Controller
     {
         $this->authorize('isAdmin');
 
-        return view('admin.major.edit', ['major' => $major]);
+        return view('admin.majors.edit', ['major' => $major]);
     }
 
     /**
