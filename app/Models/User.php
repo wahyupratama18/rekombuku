@@ -3,7 +3,9 @@
 namespace App\Models;
 
 use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\{HasOne, HasOneThrough};
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Fortify\TwoFactorAuthenticatable;
@@ -58,4 +60,46 @@ class User extends Authenticatable
     protected $appends = [
         'profile_photo_url',
     ];
+
+    /**
+     * Get the major associated with the User
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasOneThrough
+     */
+    public function major(): HasOneThrough
+    {
+        return $this->hasOneThrough(Major::class, MajorStudent::class, secondKey:'id', secondLocalKey: 'major_id');
+    }
+
+    /**
+     * Get the majorStudent associated with the User
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
+    public function majorStudent(): HasOne
+    {
+        return $this->hasOne(MajorStudent::class);
+    }
+
+    /**
+     * Scope to only include administrator
+     *
+     * @param Builder $query
+     * @return Builder
+     */
+    public function scopeAdmin(Builder $query): Builder
+    {
+        return $query->where('is_admin', 1);
+    }
+
+    /**
+     * Scope to only include non administrator
+     *
+     * @param Builder $query
+     * @return Builder
+     */
+    public function scopeNotAdmin(Builder $query): Builder
+    {
+        return $query->where('is_admin', 0);
+    }
 }

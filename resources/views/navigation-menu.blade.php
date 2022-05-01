@@ -15,6 +15,18 @@
                     <x-jet-nav-link href="{{ route('dashboard') }}" :active="request()->routeIs('dashboard')">
                         {{ __('Dashboard') }}
                     </x-jet-nav-link>
+                    
+                    {{-- Admin privilege --}}
+                    @can('isAdmin')
+                    <x-jet-nav-link href="{{ route('majors.index') }}" :active="request()->routeIs('majors.index')">
+                        {{ __('Prodi') }}
+                    </x-jet-nav-link>
+                    <x-jet-nav-link href="{{ route('students.index') }}" :active="request()->routeIs('students.index')">
+                        {{ __('Mahasiswa') }}
+                    </x-jet-nav-link>
+                    
+                    @else
+                    @endcan
                 </div>
             </div>
 
@@ -140,6 +152,15 @@
             <x-jet-responsive-nav-link href="{{ route('dashboard') }}" :active="request()->routeIs('dashboard')">
                 {{ __('Dashboard') }}
             </x-jet-responsive-nav-link>
+            
+            @can('isAdmin')
+                <x-jet-responsive-nav-link href="{{ route('majors.index') }}" :active="request()->routeIs('majors.index')">
+                    {{ __('Prodi') }}
+                </x-jet-responsive-nav-link>
+                <x-jet-responsive-nav-link href="{{ route('students.index') }}" :active="request()->routeIs('students.index')">
+                    {{ __('Mahasiswa') }}
+                </x-jet-responsive-nav-link>
+            @endcan
         </div>
 
         <!-- Responsive Settings Options -->

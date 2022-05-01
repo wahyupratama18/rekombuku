@@ -2,8 +2,7 @@
 
 namespace App\Policies;
 
-use App\Models\Borrow;
-use App\Models\User;
+use App\Models\{Borrow, User};
 use Illuminate\Auth\Access\HandlesAuthorization;
 
 class BorrowPolicy
