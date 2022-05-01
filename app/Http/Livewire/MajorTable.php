@@ -29,11 +29,12 @@ class MajorTable extends DataTableComponent
                 ->label(fn($row, Column $column) => $row->students_count)
                 /* ->sortable() */,
             Column::make('action')
-                ->label(fn($row) => view('components.action', [
+                ->label(fn($row) => view('admin.major.action', [
                     'route' => (object) [
                         'edit' => route('majors.edit', $row->id),
                         'destroy' => route('majors.destroy', $row->id),
-                    ]
+                    ],
+                    'id' => $row->id
                 ]))
         ];
     }

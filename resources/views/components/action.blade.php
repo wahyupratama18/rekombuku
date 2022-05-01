@@ -1,5 +1,7 @@
 <div class="flex items-center gap-x-3">
-    <a href="{{ $route->edit }}">
+    {{ $slot ?? '' }}
+
+    <a href="{{ $route->edit }}" title="Edit">
         <i class="mdi mdi-circle-edit-outline"></i>
     </a>
     
@@ -7,6 +9,7 @@
         @csrf
         @method('DELETE')
         <i
+        title="Hapus"
         class="mdi mdi-trash-can cursor-pointer delete"
         @click="
             Swal.fire({
