@@ -6,6 +6,7 @@ use Rappasoft\LaravelLivewireTables\DataTableComponent;
 use Rappasoft\LaravelLivewireTables\Views\Column;
 use App\Models\Major;
 use Illuminate\Database\Eloquent\Builder;
+use Rappasoft\LaravelLivewireTables\Views\Columns\LinkColumn;
 
 class MajorTable extends DataTableComponent
 {
@@ -20,7 +21,9 @@ class MajorTable extends DataTableComponent
     public function columns(): array
     {
         return [
-            Column::make("Id", "id")
+            LinkColumn::make("Id", "id")
+                ->title(fn($row) => $row->id)
+                ->location(fn($row) => route('majors.show', $row))
                 ->sortable(),
             Column::make("Nama", "name")
                 ->sortable()
