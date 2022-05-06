@@ -47,6 +47,17 @@
                         <x-jet-input id="penerbit" type="text" class="mt-1 block w-full" name="penerbit" autocomplete="penerbit" value="{{ old('penerbit') }}" />
                         <x-jet-input-error for="penerbit" class="mt-2" />
                     </div>
+                    
+                    <!-- Penulis -->
+                    <div class="col-span-6 sm:col-span-4">
+                        <x-jet-label for="writers" value="{{ __('Penulis') }}" />
+                        <select name="writers[]" id="writers" class="mt-1 block w-full" x-init="new TomSelect('#writers', {create: true})" multiple>
+                            @foreach (old('writers', []) as $writer)
+                                <option value="{{ $writer }}" selected>{{ $writer }}</option>
+                            @endforeach
+                        </select>
+                        <x-jet-input-error for="writers" class="mt-2" />
+                    </div>
            
                     <!-- Edisi -->
                     <div class="col-span-6 sm:col-span-4">
@@ -73,8 +84,8 @@
                     <div class="col-span-6 sm:col-span-4">
                         <x-jet-label for="genres" value="{{ __('Genre') }}" />
                         <select name="genres[]" id="genres" class="mt-1 block w-full" x-init="new TomSelect('#genres', {create: true})" multiple>
-                            @foreach ($genres as $genre)
-                                <option value="{{ $genre->id }}">{{ $genre->name }}</option>
+                            @foreach ($genres->merge(old('genres', []))->unique()->values() as $genre)
+                                <option value="{{ $genre }}" @selected(in_array($genre, old('genres', [])))>{{ $genre }}</option>
                             @endforeach
                         </select>
                         <x-jet-input-error for="genres" class="mt-2" />

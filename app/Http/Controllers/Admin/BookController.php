@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\{StoreBookRequest, UpdateBookRequest};
 use App\Models\{Book, Genre};
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
 
@@ -28,7 +29,7 @@ class BookController extends Controller
     public function create(): View
     {
         return view('admin.books.create', [
-            'genres' => Genre::select('id', 'name')->get()
+            'genres' => Genre::select('name')->get()->pluck('name')
         ]);
     }
 
@@ -38,37 +39,22 @@ class BookController extends Controller
      * @param  \App\Http\Requests\StoreBookRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(StoreBookRequest $request)
+    public function store(StoreBookRequest $request): RedirectResponse
     {
         DB::transaction(function() use ($request) {
-            $book = Book::create($request->safe([
+
+            Book::create($request->safe([
                 'name',
                 'isbn',
                 'year',
                 'penerbit',
                 'edition',
                 'price'
-            ]));
+            ]))
+            ->syncGenres($request->genres)
+            ->newItems($request->qty)
+            ->syncWriters($request->writers);
 
-            if ($request->genres) {
-                Genre::upsert(
-                    collect($request->genres)
-                    ->map(fn($item) => ['name' => $item])
-                    ->toArray(),
-                    ['name'],
-                    ['name'],
-                );
-    
-                $genres = Genre::select('id')
-                ->whereIn('name', $request->genres)
-                ->get()
-                ->pluck('id');
-    
-                $book->genres()->attach($genres);
-
-            }
-
-            // $book->items()
         });
 
         return redirect()->route('books.index');
@@ -80,9 +66,11 @@ class BookController extends Controller
      * @param  \App\Models\Book  $book
      * @return \Illuminate\Http\Response
      */
-    public function show(Book $book)
+    public function show(Book $book): View
     {
-        //
+        return view('admin.books.show', [
+            'book' => $book->load(['items.latestCondition', 'images', 'writers', 'genres'])
+        ]);
     }
 
     /**
@@ -91,10 +79,16 @@ class BookController extends Controller
      * @param  \App\Models\Book  $book
      * @return \Illuminate\Http\Response
      */
-    public function edit(Book $book)
+    public function edit(Book $book): View
     {
+        $writers = $book->load('writers')->writers->pluck('name');
+
         return view('admin.books.edit', [
-            'book' => $book
+            'book' => $book,
+            'genres' => Genre::select('name')->get()->pluck('name'),
+            'bookGenres' => $book->load('genres:name')->genres->pluck('name'),
+            'writers' => $writers,
+            'writersArrayed' => $writers->toArray()
         ]);
     }
 
@@ -105,9 +99,24 @@ class BookController extends Controller
      * @param  \App\Models\Book  $book
      * @return \Illuminate\Http\Response
      */
-    public function update(UpdateBookRequest $request, Book $book)
+    public function update(UpdateBookRequest $request, Book $book): RedirectResponse
     {
-        //
+        DB::transaction(function() use ($request, $book) {
+            $book
+            ->syncWriters($request->writers)
+            ->syncGenres($request->genres)
+            ->update($request->safe([
+                'name',
+                'isbn',
+                'year',
+                'penerbit',
+                'edition',
+                'price'
+            ]));
+
+        });
+
+        return redirect()->route('books.index');
     }
 
     /**
@@ -116,7 +125,7 @@ class BookController extends Controller
      * @param  \App\Models\Book  $book
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Book $book)
+    public function destroy(Book $book): RedirectResponse
     {
         DB::transaction(function () use ($book) {
             $book->genres()->detach();

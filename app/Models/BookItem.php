@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\{BelongsTo, HasMany};
+use Illuminate\Database\Eloquent\Relations\{BelongsTo, HasMany, HasOne};
 
 class BookItem extends Model
 {
@@ -32,7 +32,7 @@ class BookItem extends Model
      */
     public function book(): BelongsTo
     {
-        return $this->belongsTo(User::class, 'foreign_key', 'other_key');
+        return $this->belongsTo(Book::class);
     }
 
     /**
@@ -43,5 +43,38 @@ class BookItem extends Model
     public function borrows(): HasMany
     {
         return $this->hasMany(BorrowDetail::class);
+    }
+
+    /**
+     * Get all of the conditions for the Book
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function conditions(): HasMany
+    {
+        return $this->hasMany(BookCondition::class);
+    }
+
+    /**
+     * Get the latestCondition associated with the BookItem
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
+    public function latestCondition(): HasOne
+    {
+        return $this->hasOne(BookCondition::class)->latestOfMany();
+    }
+
+    /**
+     * New condition for the book
+     *
+     * @param integer $scale
+     * @return BookItem
+     */
+    public function newCondition(int $scale): BookItem
+    {
+        $this->conditions()->create(['scale' => $scale]);
+
+        return $this;
     }
 }

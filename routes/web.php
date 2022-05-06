@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin\{
     BookController,
+    BookItemController,
     MajorController,
     StudentController
 };
@@ -31,6 +32,7 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
         Route::resource('students', StudentController::class);
         Route::resource('majors', MajorController::class);
         Route::resource('books', BookController::class);
+        Route::resource('books.items', BookItemController::class);
         // Route::get('test', fn() => dd('ok'));
     });
     

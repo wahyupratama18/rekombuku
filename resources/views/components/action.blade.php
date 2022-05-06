@@ -2,7 +2,7 @@
     {{ $slot ?? '' }}
 
     <a href="{{ $route->edit }}" title="Edit">
-        <i class="mdi mdi-circle-edit-outline"></i>
+        <i class="mdi mdi-circle-edit-outline text-yellow-400"></i>
     </a>
     
     <form method="post" action="{{ $route->destroy }}" x-data>
@@ -10,7 +10,7 @@
         @method('DELETE')
         <i
         title="Hapus"
-        class="mdi mdi-trash-can cursor-pointer delete"
+        class="mdi mdi-trash-can cursor-pointer text-red-400"
         @click="
             Swal.fire({
                 text: 'Apakah anda yakin ingin menghapusnya?',

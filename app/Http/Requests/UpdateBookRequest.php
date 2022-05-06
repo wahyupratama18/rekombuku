@@ -11,9 +11,9 @@ class UpdateBookRequest extends FormRequest
      *
      * @return bool
      */
-    public function authorize()
+    public function authorize(): bool
     {
-        return false;
+        return $this->user()->can('isAdmin');
     }
 
     /**
@@ -21,10 +21,19 @@ class UpdateBookRequest extends FormRequest
      *
      * @return array
      */
-    public function rules()
+    public function rules(): array
     {
         return [
-            //
+            'name' => 'required|string',
+            'isbn' => 'required|string',
+            'year' => 'required|numeric|max:'.date('Y'),
+            'penerbit' => 'required|string',
+            'writers' => 'required|array',
+            'writers.*' => 'required|string',
+            'edition' => 'required|string',
+            'price' => 'required|numeric|min:0',
+            'genres' => 'nullable',
+            'genres.*' => 'required|string'
         ];
     }
 }

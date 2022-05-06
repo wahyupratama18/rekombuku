@@ -28,10 +28,12 @@ class StoreBookRequest extends FormRequest
             'isbn' => 'required|string',
             'year' => 'required|numeric|max:'.date('Y'),
             'penerbit' => 'required|string',
+            'writers' => 'required|array',
+            'writers.*' => 'required|string',
             'edition' => 'required|string',
             'price' => 'required|numeric|min:0',
-            'genres' => 'nullable',
-            'genres.*' => 'required',
+            'genres' => 'nullable|array',
+            'genres.*' => 'required|string',
             'qty' => 'required|integer|min:1'
         ];
     }

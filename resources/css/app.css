@@ -3,3 +3,11 @@
 @import 'tailwindcss/utilities';
 
 @import 'tom-select/dist/css/tom-select.min';
+
+#rating label {
+    @apply text-yellow-400;
+}
+
+#rating input:checked + label ~ label {
+    @apply text-slate-400;
+}

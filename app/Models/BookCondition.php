@@ -10,7 +10,8 @@ class BookCondition extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['scale'];
+    protected $fillable = ['scale'],
+    $appends = ['stars'];
 
     /**
      * Get the item that owns the BookCondition
@@ -20,5 +21,11 @@ class BookCondition extends Model
     public function item(): BelongsTo
     {
         return $this->belongsTo(BookItem::class);
+    }
+
+    public function getStarsAttribute(): string
+    {
+        return str_repeat('<i class="mdi mdi-star text-yellow-400"></i>', $this->scale)
+        .str_repeat('<i class="mdi mdi-star"></i>', 5 - $this->scale).' <small>('.$this->created_at->translatedFormat('j F Y H:m').')</small>';
     }
 }
